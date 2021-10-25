@@ -1,0 +1,28 @@
+.confirm-cases {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 24px;
+  height: 70px;
+  /* or 171% */
+}
+
+.state {
+  color: #f1f5f9;
+}
+.confirmedtype {
+  color: #ff073a;
+}
+.activetype {
+  color: #007bff;
+}
+.recoveredtype {
+  color: #28a745;
+}
+.deceasedtype {
+  color: #6c757d;
+}
+.populationtype {
+  color: #94a3b8;
+}
