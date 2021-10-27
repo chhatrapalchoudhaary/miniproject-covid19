@@ -1,11 +1,12 @@
 import {Component} from 'react'
 import Loader from 'react-loader-spinner'
+import {Link} from 'react-router-dom'
+import {v4 as uuidv4} from 'uuid'
 import {FiSearch} from 'react-icons/fi'
 import Header from '../Header'
 import Footer from '../Footer'
 import TotalStats from '../TotalStats'
 import './index.css'
-import CountingOfCases from '../CountingoOfCases'
 import SearchResult from '../SearchResult'
 
 const statesList = [
@@ -162,13 +163,11 @@ class Home extends Component {
     totalConfirmedCases: 0,
     totalRecoveredCases: 0,
     totalDeceasedCases: 0,
-    nationalData: {},
     confirmedCases: [],
     activeCases: [],
     RecoveredCases: [],
     DeceasedCases: [],
     PopulationCases: [],
-    stateListFinal: [],
     search: '',
     filteredSearchList: [],
   }
@@ -235,7 +234,6 @@ class Home extends Component {
       )
 
       this.setState({
-        nationalData: data,
         totalActiveCases: nationalWideActiveCases,
         totalRecoveredCases: nationalWideRecoveredCases,
         totalDeceasedCases: nationalWideDeceasedCases,
@@ -261,7 +259,7 @@ class Home extends Component {
     return (
       <>
         <div testid="countryWideConfirmedCases" className="stats-block-column">
-          <h1 className="stats-title red">Confirmed</h1>
+          <p className="stats-title red">Confirmed</p>
           <img
             src="/img/check-mark 1.png"
             className="stats-icon"
@@ -271,7 +269,7 @@ class Home extends Component {
           <p className="stats-number red">{totalConfirmedCases}</p>
         </div>
         <div testid="countryWideActiveCases" className="stats-block-column">
-          <h1 className="stats-title blue">Active</h1>
+          <p className="stats-title blue">Active</p>
           <img
             src="/img/protection 1.png"
             className="stats-icon"
@@ -280,7 +278,7 @@ class Home extends Component {
           <p className="stats-number blue">{totalActiveCases}</p>
         </div>
         <div testid="countryWideRecoveredCases" className="stats-block-column">
-          <h1 className="stats-title green">Recovered</h1>
+          <p className="stats-title green">Recovered</p>
           <img
             src="/img/recovered 1.png"
             className="stats-icon"
@@ -289,7 +287,7 @@ class Home extends Component {
           <p className="stats-number green">{totalRecoveredCases}</p>
         </div>
         <div testid="countryWideDeceasedCases" className="stats-block-column ">
-          <h1 className="stats-title gray">Deceased</h1>
+          <p className="stats-title gray">Deceased</p>
           <img
             src="/img/breathing 1.png"
             className="stats-icon"
@@ -317,7 +315,7 @@ class Home extends Component {
     } = this.state
 
     return (
-      <div className="all-states-table">
+      <div className="all-states-table" testid="stateWiseCovidDataTable">
         <div className="table-header">
           <div className="state-name-heading">
             <p className="table-header-title ">States/UT</p>
@@ -341,36 +339,38 @@ class Home extends Component {
         <div className="state-wise-data-container">
           <ul className="states-names">
             {statesList.map(each => (
-              <TotalStats
-                key={each.state_code}
-                data={each.state_name}
-                type="state"
-              />
+              <Link to={`/state/${each.state_code}`} className="link-search">
+                <TotalStats
+                  key={each.state_code}
+                  data={each.state_name}
+                  type="state"
+                />
+              </Link>
             ))}
           </ul>
           <ul className="other-tables">
             {confirmedCases.map(each => (
-              <TotalStats data={each} type="confirmed" />
+              <TotalStats key={uuidv4()} data={each} type="confirmed" />
             ))}
           </ul>
           <ul className="other-tables">
             {activeCases.map(each => (
-              <TotalStats data={each} type="active" />
+              <TotalStats key={uuidv4()} data={each} type="active" />
             ))}
           </ul>
           <ul className="other-tables">
             {RecoveredCases.map(each => (
-              <TotalStats data={each} type="recover" />
+              <TotalStats key={uuidv4()} data={each} type="recover" />
             ))}
           </ul>
           <ul className="other-tables">
             {DeceasedCases.map(each => (
-              <TotalStats data={each} type="deceased" />
+              <TotalStats key={uuidv4()} data={each} type="deceased" />
             ))}
           </ul>
           <ul className="other-tables">
             {PopulationCases.map(each => (
-              <TotalStats data={each} type="population" />
+              <TotalStats key={uuidv4()} data={each} type="population" />
             ))}
           </ul>
         </div>
@@ -379,7 +379,6 @@ class Home extends Component {
   }
 
   searchStarted = event => {
-    const {search} = this.state
     const searchItem = event.target.value
     const searchResult = statesList.filter(data =>
       data.state_name.toLowerCase().includes(searchItem.toLowerCase()),
@@ -392,10 +391,13 @@ class Home extends Component {
   }
 
   showSearchList = () => {
-    const {filteredSearchList, search} = this.state
+    const {filteredSearchList} = this.state
 
     return (
-      <ul className="search-result-container">
+      <ul
+        className="search-result-container"
+        testid="searchResultsUnorderedList"
+      >
         {filteredSearchList.map(each => (
           <SearchResult
             key={each.state_code}
@@ -409,7 +411,6 @@ class Home extends Component {
   }
 
   removeFilteredList = () => {
-    const {filteredSearchList} = this.state
     this.setState({filteredSearchList: []})
   }
 
@@ -433,14 +434,17 @@ class Home extends Component {
             />
           </div>
           {search.length > 0 ? showSearchList : ''}
-          <div className="country-stats">
-            {isLoading
-              ? this.renderLoadingView()
-              : this.renderAllNationalData()}
-          </div>
-          <div className="state-table">
-            {isLoading ? this.renderLoadingView() : this.renderAllStatesList()}
-          </div>
+          {isLoading ? (
+            this.renderLoadingView()
+          ) : (
+            <>
+              <div className="country-stats">
+                {this.renderAllNationalData()}
+              </div>
+              <div className="state-table">{this.renderAllStatesList()}</div>
+            </>
+          )}
+
           <Footer />
         </div>
       </div>

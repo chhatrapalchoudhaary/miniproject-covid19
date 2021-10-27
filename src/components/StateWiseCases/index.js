@@ -1,8 +1,10 @@
 import {Component} from 'react'
 import Loader from 'react-loader-spinner'
+import objectPath from 'object-path'
 import Header from '../Header'
 import './index.css'
 import ShowEachDistrictData from '../ShowEachDistrictData'
+import StateTotalData from '../StateTotalData'
 
 const statesList = [
   {
@@ -151,24 +153,17 @@ const statesList = [
   },
 ]
 
-const tabsType = {
-  confirm: 'CONFIRMED',
-  active: 'ACTIVE',
-  recovered: 'RECORDED',
-  deceased: 'DECEASED',
-}
-
 class StateWiseCases extends Component {
   state = {
+    eachStateTotalData: [],
     isLoading: true,
-    totalStateConfirmData: 0,
-    totalStateRecoveredData: 0,
-    totalStateDeceasedData: 0,
-    totalStateActiveData: 0,
     totalTestedData: 0,
     nameOfState: '',
-    activeTab: tabsType.confirm,
-    districtData: [],
+    activeTab: true,
+    category: 'Confirmed',
+    id: '',
+    dataarray: [],
+    date: '',
   }
 
   componentDidMount() {
@@ -179,9 +174,6 @@ class StateWiseCases extends Component {
     const {match} = this.props
     const {params} = match
     const {stateCode} = params
-    console.log('Get ID')
-    console.log(stateCode)
-
     const apiUrl = `https://apis.ccbp.in/covid19-state-wise-data/`
     const options = {
       method: 'GET',
@@ -190,41 +182,45 @@ class StateWiseCases extends Component {
     const response = await fetch(apiUrl, options)
     if (response.ok) {
       const data = await response.json()
-      console.log(data)
-      // let stateConfirmedData = 0
-      const stateConfirmedData = data[stateCode].total.confirmed
-      const stateRecoveredData = data[stateCode].total.recovered
-      const stateActivedata =
-        data[stateCode].total.confirmed -
-        (data[stateCode].total.recovered - data[stateCode].total.deceased)
-      const stateDeceasedData = data[stateCode].total.deceased
       const stateTastedData = data[stateCode].total.tested
       const stateObject = statesList.filter(
         each => each.state_code === stateCode,
       )
+      const eachState = data[stateCode].total
       const stateName = stateObject[0].state_name
 
-      const emptyArray = []
+      const getData = Object.keys(data)
+        .filter(each => each === stateCode)
+        .map(e => objectPath.get(data, `${e}.meta.last_updated`))
 
-      Object.keys(data[stateCode].districts).forEach(key =>
-        emptyArray.push(data[stateCode].districts[key]),
-      )
-      //   emptyArray.push(data[stateCode].districts)
-      console.log(emptyArray)
+      const date = new Date(getData)
+
+      const ans = date.toLocaleString('en-US', {
+        weekday: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        month: 'long',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+      })
 
       this.setState({
-        totalStateConfirmData: stateConfirmedData,
-        totalStateActiveData: stateActivedata,
-        totalStateRecoveredData: stateRecoveredData,
-        totalStateDeceasedData: stateDeceasedData,
+        eachStateTotalData: eachState,
         totalTestedData: stateTastedData,
         nameOfState: stateName,
         isLoading: false,
-        districtData: emptyArray,
+        id: stateCode,
+        dataarray: data,
+        date: ans,
       })
     } else {
       console.log('Fetch Error')
     }
+  }
+
+  onGetCategory = categoryVal => {
+    this.setState({category: categoryVal, activeTab: false})
   }
 
   renderLoadingView = () => (
@@ -233,19 +229,45 @@ class StateWiseCases extends Component {
     </div>
   )
 
+  getCategoryWiseData = () => {
+    const {category, id, dataarray} = this.state
+    const districtOutput = dataarray[id].districts
+    const distNamesList = Object.keys(districtOutput)
+    const categoryLower = category.toLowerCase()
+
+    const categoryData = distNamesList.map(element => ({
+      distName: element,
+      value: districtOutput[element].total[categoryLower],
+    }))
+
+    categoryData.sort((a, b) => b.value - a.value)
+    const removeNonValues = categoryData.filter(eachDist => eachDist.value > 0)
+
+    const activeCases = distNamesList.map(element => ({
+      distName: element,
+      value:
+        districtOutput[element].total.confirmed -
+        districtOutput[element].total.recovered -
+        districtOutput[element].total.deceased,
+    }))
+    activeCases.sort((a, b) => b.value - a.value)
+    const removeActiveNullValues = activeCases.filter(each => each.value > 0)
+    if (categoryLower === 'active') {
+      return removeActiveNullValues
+    }
+    return removeNonValues
+  }
+
   renderStateView = () => {
     const {
-      totalStateConfirmData,
-      totalStateActiveData,
-      totalStateDeceasedData,
-      totalStateRecoveredData,
       nameOfState,
       totalTestedData,
+      eachStateTotalData,
       activeTab,
+      date,
+      category,
     } = this.state
-
-    const showData =
-      activeTab === 'CONFIRMED' ? this.renderConfirmedTabItems() : ''
+    const catdata = this.getCategoryWiseData()
 
     return (
       <div className="state-details">
@@ -256,72 +278,36 @@ class StateWiseCases extends Component {
             <h1 className="testno">{totalTestedData}</h1>
           </div>
         </div>
-        <p className="last-date">Last update on march 28th 2021</p>
+        <div testid="timelinesDataLoader">
+          <p className="last-date">{`last update on ${date}`}</p>
+        </div>
         <div className="align-center-row">
-          <div className="country-stats">
-            <div
-              testid="countryWideConfirmedCases"
-              className="stats-block-column hovereffectconfirm"
-            >
-              <h1 className="stats-title red">Confirmed</h1>
-              <img
-                src="/img/check-mark 1.png"
-                className="stats-icon"
-                alt="country wide confirmed cases pic"
-              />
-
-              <p className="stats-number red">{totalStateConfirmData}</p>
-            </div>
-            <div testid="countryWideActiveCases" className="stats-block-column">
-              <h1 className="stats-title blue">Active</h1>
-              <img
-                src="/img/protection 1.png"
-                className="stats-icon"
-                alt="country wide active cases pic"
-              />
-              <p className="stats-number blue">{totalStateActiveData}</p>
-            </div>
-            <div
-              testid="countryWideRecoveredCases"
-              className="stats-block-column"
-            >
-              <h1 className="stats-title green">Recovered</h1>
-              <img
-                src="/img/recovered 1.png"
-                className="stats-icon"
-                alt="country wide recovered cases pic"
-              />
-              <p className="stats-number green">{totalStateRecoveredData}</p>
-            </div>
-            <div
-              testid="countryWideDeceasedCases"
-              className="stats-block-column"
-            >
-              <h1 className="stats-title gray">Deceased</h1>
-              <img
-                src="/img/breathing 1.png"
-                className="stats-icon"
-                alt="country wide deceased cases pic"
-              />
-              <p className="stats-number gray">{totalStateDeceasedData}</p>
-            </div>
+          <div className="country-stats" testid="stateDetailsLoader">
+            <StateTotalData
+              onGetCategory={this.onGetCategory}
+              eachStateTotalData={eachStateTotalData}
+              active={activeTab}
+            />
           </div>
         </div>
-        {showData}
-      </div>
-    )
-  }
 
-  renderConfirmedTabItems = () => {
-    const {districtData} = this.state
-    return (
-      <div className="data-container">
-        <h1 className="heading confirm">Top Districts</h1>
-        <ul>
-          {districtData.map(each => (
-            <ShowEachDistrictData number={each.total.confirmed} name={each} />
-          ))}
-        </ul>
+        <div className="total-district-data-block">
+          <h1 className={`district-heading ${category}-color`}>
+            Top Districts
+          </h1>
+          <div className="ul-parent-list">
+            <ul className="district-data-ul-list">
+              {catdata.map(each => (
+                <div className="districts-container" key={each.distName}>
+                  <ShowEachDistrictData
+                    number={each.value}
+                    name={each.distName}
+                  />
+                </div>
+              ))}
+            </ul>
+          </div>
+        </div>
       </div>
     )
   }

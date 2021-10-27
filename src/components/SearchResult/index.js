@@ -13,7 +13,12 @@ const SearchResult = props => {
 
           <button type="button" className="search-button">
             {statecode}
-            <img src="/img/Line.png" alt="line icon" className="icon-right" />
+            <img
+              src="/img/Line.png"
+              data-testid="searchResultChevronRightIcon"
+              alt="line icon"
+              className="icon-right"
+            />
           </button>
         </div>
       </Link>

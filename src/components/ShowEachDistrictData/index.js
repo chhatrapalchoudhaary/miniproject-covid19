@@ -4,9 +4,9 @@ const ShowEachDistrictData = props => {
   const {number, name} = props
 
   return (
-    <li>
-      <p>{number}</p>
-      <p>{name}</p>
+    <li className="list-style">
+      <p className="district-numbers">{number}</p>
+      <p className="district-name">{name}</p>
     </li>
   )
 }

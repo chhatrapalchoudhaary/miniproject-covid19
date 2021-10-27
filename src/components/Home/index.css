@@ -95,27 +95,6 @@
   color: #6c757d;
 }
 
-.confirmed-block {
-  background: #331427;
-  border-radius: 12px;
-  padding: 42px;
-}
-.active-block {
-  background: #132240;
-  border-radius: 12px;
-  padding: 42px;
-}
-.recovered-block {
-  background: #182829;
-  border-radius: 12px;
-  padding: 42px;
-}
-.deceased-block {
-  background: #212230;
-  border-radius: 12px;
-  padding: 42px;
-}
-
 .list {
   list-style-type: none;
 }
