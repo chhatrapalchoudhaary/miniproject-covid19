@@ -1,6 +1,6 @@
 import {Component} from 'react'
 import Loader from 'react-loader-spinner'
-import objectPath from 'object-path'
+
 import Header from '../Header'
 import './index.css'
 import ShowEachDistrictData from '../ShowEachDistrictData'
@@ -189,21 +189,8 @@ class StateWiseCases extends Component {
       const eachState = data[stateCode].total
       const stateName = stateObject[0].state_name
 
-      const getData = Object.keys(data)
-        .filter(each => each === stateCode)
-        .map(e => objectPath.get(data, `${e}.meta.last_updated`))
-
-      const date = new Date(getData)
-
-      const ans = date.toLocaleString('en-US', {
-        weekday: 'short',
-        day: 'numeric',
-        year: 'numeric',
-        month: 'long',
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric',
-      })
+      const datedata = new Date(data[stateCode].meta.last_updated)
+      console.log(datedata)
 
       this.setState({
         eachStateTotalData: eachState,
@@ -212,7 +199,7 @@ class StateWiseCases extends Component {
         isLoading: false,
         id: stateCode,
         dataarray: data,
-        date: ans,
+        date: datedata,
       })
     } else {
       console.log('Fetch Error')

@@ -1,28 +1,73 @@
-.confirm-cases {
+.states-container-home {
+  width: 22%;
+}
+.list-all-cases {
+  list-style-type: none;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+.home-columns {
+  width: 15.6%;
+}
+
+.link-home {
+  list-style-type: none;
+  text-decoration: none;
+}
+
+.states-names-home {
   font-family: Roboto;
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
   line-height: 24px;
-  height: 70px;
-  /* or 171% */
+  color: #f1f5f9;
+  padding: 0px 32px;
 }
 
-.state {
-  color: #f1f5f9;
-}
-.confirmedtype {
+.confirmed-home {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 24px;
   color: #ff073a;
 }
-.activetype {
+
+.active-home {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 24px;
   color: #007bff;
 }
-.recoveredtype {
+
+.recovered-home {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 24px;
   color: #28a745;
 }
-.deceasedtype {
+
+.deceased-home {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 24px;
   color: #6c757d;
 }
-.populationtype {
+.population-home {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 24px;
   color: #94a3b8;
 }

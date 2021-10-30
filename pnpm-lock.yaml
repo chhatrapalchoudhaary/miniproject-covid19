@@ -3,7 +3,6 @@ dependencies:
   '@testing-library/react': 11.2.5_react-dom@17.0.1+react@17.0.1
   '@testing-library/user-event': 12.6.2
   chalk: 4.1.0
-  object-path: 0.11.8
   react: 17.0.1
   react-dom: 17.0.1_react@17.0.1
   react-icons: 4.3.1_react@17.0.1
@@ -11,7 +10,6 @@ dependencies:
   react-router-dom: 5.3.0_react@17.0.1
   react-select: 4.3.1_react-dom@17.0.1+react@17.0.1
   recharts: 2.0.9_react-dom@17.0.1+react@17.0.1
-  uuid: 8.3.2
 devDependencies:
   eslint-config-airbnb: 18.2.1
   eslint-config-prettier: 8.1.0
@@ -8860,12 +8858,6 @@ packages:
       node: '>= 0.4'
     resolution:
       integrity: sha512-NuAESUOUMrlIXOfHKzD6bpPu3tYt3xvjNdRIQ+FeT0lNb4K8WR70CaDxhuNguS2XG+GjkyMwOzsN5ZktImfhLA==
-  /object-path/0.11.8:
-    dev: false
-    engines:
-      node: '>= 10.12.0'
-    resolution:
-      integrity: sha512-YJjNZrlXJFM42wTBn6zgOJVar9KFJvzx6sTWDte8sWZF//cnjl0BxHNpfZx+ZffXX63A9q0b1zsFiBX4g4X5KA==
   /object-visit/1.0.1:
     dependencies:
       isobject: 3.0.1
@@ -12631,7 +12623,9 @@ packages:
     resolution:
       integrity: sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
   /uuid/8.3.2:
+    dev: true
     hasBin: true
+    optional: true
     resolution:
       integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
   /v8-compile-cache/2.3.0:
@@ -13257,7 +13251,6 @@ specifiers:
   husky: 4.3.8
   lint-staged: 10.5.4
   npm-run-all: 4.1.5
-  object-path: 0.11.8
   prettier: 2.2.1
   react: 17.0.1
   react-dom: 17.0.1
@@ -13267,4 +13260,3 @@ specifiers:
   react-scripts: 4.0.3
   react-select: 4.3.1
   recharts: 2.0.9
-  uuid: 8.3.2

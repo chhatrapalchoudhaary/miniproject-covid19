@@ -134,25 +134,21 @@
 }
 .state-wise-data-container {
   display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
+  flex-direction: column;
 }
 .states-names {
   width: 22%;
-
-  /* or 171% */
-
-  /* Light / blue-gray / 100 */
 }
 
 .state-name-heading {
   width: 22%;
-
   padding: 0px 32px;
 }
-.other-tables {
-  width: 15.6%;
 
-  padding: 0px 20px;
+.other-tables-bar {
+  width: 15.6%;
+}
+
+.other-tables {
+  padding: 0;
 }

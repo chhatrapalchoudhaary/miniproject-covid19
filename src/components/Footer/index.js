@@ -14,9 +14,9 @@ export default function Footer() {
         we stand with everyone fighting on the front lines
       </p>
       <div className="icon-container">
-        <VscGithubAlt testid="githubIcon" className="icon" />
-        <FiInstagram testid="instagramIcon" className="icon" />
-        <FaTwitter testid="twitterIcon" className="icon" />
+        <VscGithubAlt className="icon" />
+        <FiInstagram className="icon" />
+        <FaTwitter className="icon" />
       </div>
     </div>
   )

@@ -1,8 +1,7 @@
 import {Component} from 'react'
 import Loader from 'react-loader-spinner'
 import {Link} from 'react-router-dom'
-import {v4 as uuidv4} from 'uuid'
-import {FiSearch} from 'react-icons/fi'
+import {BsSearch} from 'react-icons/bs'
 import Header from '../Header'
 import Footer from '../Footer'
 import TotalStats from '../TotalStats'
@@ -163,13 +162,9 @@ class Home extends Component {
     totalConfirmedCases: 0,
     totalRecoveredCases: 0,
     totalDeceasedCases: 0,
-    confirmedCases: [],
-    activeCases: [],
-    RecoveredCases: [],
-    DeceasedCases: [],
-    PopulationCases: [],
     search: '',
     filteredSearchList: [],
+    statesinfo: [],
   }
 
   componentDidMount() {
@@ -190,11 +185,6 @@ class Home extends Component {
       let nationalWideRecoveredCases = 0
       let nationalWideDeceasedCases = 0
       let nationalWideActiveCases = 0
-      const stateWiseConfirmedCases = []
-      const stateWiseRecoveredCases = []
-      const stateWiseDeceasedCases = []
-      const stateWiseActiveCases = []
-      const populationData = []
 
       statesList.forEach(state => {
         nationalWideConfirmedCases += data[state.state_code].total.confirmed
@@ -212,38 +202,33 @@ class Home extends Component {
             data[state.state_code].total.deceased)
       })
 
-      statesList.forEach(state =>
-        stateWiseConfirmedCases.push(data[state.state_code].total.confirmed),
-      )
-      statesList.forEach(state =>
-        stateWiseRecoveredCases.push(data[state.state_code].total.recovered),
-      )
-      statesList.forEach(state =>
-        stateWiseDeceasedCases.push(data[state.state_code].total.deceased),
-      )
-      statesList.forEach(state =>
-        populationData.push(data[state.state_code].meta.population),
-      )
-
-      statesList.forEach(state =>
-        stateWiseActiveCases.push(
-          data[state.state_code].total.confirmed -
-            (data[state.state_code].total.recovered +
-              data[state.state_code].total.deceased),
-        ),
-      )
+      const states = statesList.map(each => ({
+        stateName: each.state_name,
+        stateCode: each.state_code,
+        confirmed: Object.keys(data)
+          .filter(state => state === each.state_code)
+          .map(e => data[e].total.confirmed),
+        recovered: Object.keys(data)
+          .filter(state => state === each.state_code)
+          .map(e => data[e].total.recovered),
+        deceased: Object.keys(data)
+          .filter(state => state === each.state_code)
+          .map(e => data[e].total.deceased),
+        other: Object.keys(data)
+          .filter(state => state === each.state_code)
+          .map(e => data[e].total.other),
+        population: Object.keys(data)
+          .filter(state => state === each.state_code)
+          .map(e => data[e].meta.population),
+      }))
 
       this.setState({
         totalActiveCases: nationalWideActiveCases,
         totalRecoveredCases: nationalWideRecoveredCases,
         totalDeceasedCases: nationalWideDeceasedCases,
         totalConfirmedCases: nationalWideConfirmedCases,
-        confirmedCases: stateWiseConfirmedCases,
-        RecoveredCases: stateWiseRecoveredCases,
-        DeceasedCases: stateWiseDeceasedCases,
-        PopulationCases: populationData,
-        activeCases: stateWiseActiveCases,
         isLoading: false,
+        statesinfo: states,
       })
     }
   }
@@ -300,19 +285,13 @@ class Home extends Component {
   }
 
   renderLoadingView = () => (
-    <div className="products-details-loader-container" testid="homeRouteLoader">
+    <div homeRouteLoader className="products-details-loader-container">
       <Loader type="ThreeDots" color="#0b69ff" height="50" width="50" />
     </div>
   )
 
   renderAllStatesList = () => {
-    const {
-      confirmedCases,
-      activeCases,
-      RecoveredCases,
-      DeceasedCases,
-      PopulationCases,
-    } = this.state
+    const {statesinfo} = this.state
 
     return (
       <div className="all-states-table" testid="stateWiseCovidDataTable">
@@ -320,57 +299,26 @@ class Home extends Component {
           <div className="state-name-heading">
             <p className="table-header-title ">States/UT</p>
           </div>
-          <div className="other-tables">
+          <div className="other-tables-bar">
             <p className="table-header-title">Confirmed</p>
           </div>
-          <div className="other-tables">
+          <div className="other-tables-bar">
             <p className="table-header-title">Active</p>
           </div>
-          <div className="other-tables">
+          <div className="other-tables-bar">
             <p className="table-header-title">Recovered</p>
           </div>
-          <div className="other-tables">
+          <div className="other-tables-bar">
             <p className="table-header-title">Deceased</p>
           </div>
-          <div className="other-tables">
+          <div className="other-tables-bar">
             <p className="table-header-title">Population</p>
           </div>
         </div>
         <div className="state-wise-data-container">
-          <ul className="states-names">
-            {statesList.map(each => (
-              <Link to={`/state/${each.state_code}`} className="link-search">
-                <TotalStats
-                  key={each.state_code}
-                  data={each.state_name}
-                  type="state"
-                />
-              </Link>
-            ))}
-          </ul>
           <ul className="other-tables">
-            {confirmedCases.map(each => (
-              <TotalStats key={uuidv4()} data={each} type="confirmed" />
-            ))}
-          </ul>
-          <ul className="other-tables">
-            {activeCases.map(each => (
-              <TotalStats key={uuidv4()} data={each} type="active" />
-            ))}
-          </ul>
-          <ul className="other-tables">
-            {RecoveredCases.map(each => (
-              <TotalStats key={uuidv4()} data={each} type="recover" />
-            ))}
-          </ul>
-          <ul className="other-tables">
-            {DeceasedCases.map(each => (
-              <TotalStats key={uuidv4()} data={each} type="deceased" />
-            ))}
-          </ul>
-          <ul className="other-tables">
-            {PopulationCases.map(each => (
-              <TotalStats key={uuidv4()} data={each} type="population" />
+            {statesinfo.map(each => (
+              <TotalStats key={each.stateCode} data={each} />
             ))}
           </ul>
         </div>
@@ -424,7 +372,7 @@ class Home extends Component {
         <Header />
         <div className="container">
           <div className="search-container">
-            <FiSearch testid="searchIcon" className="search-icon" />
+            <BsSearch testid="searchIcon" className="search-icon" />
             <input
               type="search"
               placeholder="Enter the State"
