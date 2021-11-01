@@ -187,20 +187,16 @@ class Home extends Component {
       let nationalWideActiveCases = 0
 
       statesList.forEach(state => {
-        nationalWideConfirmedCases += data[state.state_code].total.confirmed
+        if (data[state.state_code]) {
+          const {total} = data[state.state_code]
+          nationalWideConfirmedCases += total.confirmed ? total.confirmed : 0
+          nationalWideRecoveredCases += total.recovered ? total.recovered : 0
+          nationalWideDeceasedCases += total.deceased ? total.deceased : 0
+        }
       })
-      statesList.forEach(state => {
-        nationalWideRecoveredCases += data[state.state_code].total.recovered
-      })
-      statesList.forEach(state => {
-        nationalWideDeceasedCases += data[state.state_code].total.deceased
-      })
-      statesList.forEach(state => {
-        nationalWideActiveCases +=
-          data[state.state_code].total.confirmed -
-          (data[state.state_code].total.recovered +
-            data[state.state_code].total.deceased)
-      })
+      nationalWideActiveCases +=
+        nationalWideConfirmedCases -
+        (nationalWideRecoveredCases + nationalWideDeceasedCases)
 
       const states = statesList.map(each => ({
         stateName: each.state_name,
@@ -285,7 +281,7 @@ class Home extends Component {
   }
 
   renderLoadingView = () => (
-    <div homeRouteLoader className="products-details-loader-container">
+    <div className="products-details-loader-container" testid="homeRouteLoader">
       <Loader type="ThreeDots" color="#0b69ff" height="50" width="50" />
     </div>
   )

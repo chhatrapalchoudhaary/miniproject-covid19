@@ -5,6 +5,7 @@ import Header from '../Header'
 import './index.css'
 import ShowEachDistrictData from '../ShowEachDistrictData'
 import StateTotalData from '../StateTotalData'
+import ChartsData from '../ChartsData'
 
 const statesList = [
   {
@@ -164,6 +165,7 @@ class StateWiseCases extends Component {
     id: '',
     dataarray: [],
     date: '',
+    stateCode: '',
   }
 
   componentDidMount() {
@@ -200,6 +202,7 @@ class StateWiseCases extends Component {
         id: stateCode,
         dataarray: data,
         date: datedata,
+        stateCode,
       })
     } else {
       console.log('Fetch Error')
@@ -211,7 +214,10 @@ class StateWiseCases extends Component {
   }
 
   renderLoadingView = () => (
-    <div className="products-details-loader-container" testid="homeRouteLoader">
+    <div
+      className="products-details-loader-container"
+      testid="stateDetailsLoader"
+    >
       <Loader type="ThreeDots" color="#0b69ff" height="50" width="50" />
     </div>
   )
@@ -224,11 +230,12 @@ class StateWiseCases extends Component {
 
     const categoryData = distNamesList.map(element => ({
       distName: element,
-      value: districtOutput[element].total[categoryLower],
+      value: districtOutput[element].total[categoryLower]
+        ? districtOutput[element].total[categoryLower]
+        : 0,
     }))
 
     categoryData.sort((a, b) => b.value - a.value)
-    const removeNonValues = categoryData.filter(eachDist => eachDist.value > 0)
 
     const activeCases = distNamesList.map(element => ({
       distName: element,
@@ -238,11 +245,11 @@ class StateWiseCases extends Component {
         districtOutput[element].total.deceased,
     }))
     activeCases.sort((a, b) => b.value - a.value)
-    const removeActiveNullValues = activeCases.filter(each => each.value > 0)
+
     if (categoryLower === 'active') {
-      return removeActiveNullValues
+      return activeCases
     }
-    return removeNonValues
+    return categoryData
   }
 
   renderStateView = () => {
@@ -253,6 +260,7 @@ class StateWiseCases extends Component {
       activeTab,
       date,
       category,
+      stateCode,
     } = this.state
     const catdata = this.getCategoryWiseData()
 
@@ -294,6 +302,7 @@ class StateWiseCases extends Component {
               ))}
             </ul>
           </div>
+          <ChartsData stateCode={stateCode} />
         </div>
       </div>
     )

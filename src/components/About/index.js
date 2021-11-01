@@ -60,7 +60,7 @@ class About extends Component {
     const {faqData, factsData} = this.state
     return (
       <>
-        <ul testid="faqsUnorderedList" className="factlist">
+        <ul data-testid="faqsUnorderedList" className="factlist">
           {faqData.map(each => (
             <FaqsList
               key={each.qno}
