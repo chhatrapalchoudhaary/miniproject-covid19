@@ -1,10 +1,23 @@
 import {Component} from 'react'
-import {LineChart, Line, XAxis, YAxis, Tooltip, Legend} from 'recharts'
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  BarChart,
+  CartesianGrid,
+  Bar,
+  Label,
+} from 'recharts'
+import {format} from 'date-fns'
 import './index.css'
 
 class ChartsData extends Component {
   state = {
     alldata: '',
+    forOtherChart: '',
   }
 
   componentDidMount() {
@@ -28,7 +41,19 @@ class ChartsData extends Component {
       const dataDateWise = Object.keys(data[stateCode].dates)
 
       const particularState = dataDateWise.map(date => ({
-        dateval: date,
+        date: format(new Date(date), 'dd MMM'),
+        confirmed: data[stateCode].dates[date].total.confirmed,
+        deceased: data[stateCode].dates[date].total.deceased,
+        recovered: data[stateCode].dates[date].total.recovered,
+        tested: data[stateCode].dates[date].total.tested,
+        active:
+          data[stateCode].dates[date].total.confirmed -
+          (data[stateCode].dates[date].total.deceased +
+            data[stateCode].dates[date].total.recovered),
+      }))
+
+      const particularStateForOtherChart = dataDateWise.map(date => ({
+        date,
         confirmed: data[stateCode].dates[date].total.confirmed,
         deceased: data[stateCode].dates[date].total.deceased,
         recovered: data[stateCode].dates[date].total.recovered,
@@ -40,20 +65,64 @@ class ChartsData extends Component {
       }))
 
       console.log(particularState)
-      this.setState({alldata: particularState})
+      this.setState({
+        alldata: particularState,
+        forOtherChart: particularStateForOtherChart,
+      })
     }
   }
 
-  graph = (type, color) => {
+  barChart = () => {
     const {alldata} = this.state
+    const toptendata = alldata.slice(Math.max(alldata.length - 10, 0))
+    // console.log('all data for bar chart')
+    // console.log(toptendata)
+
+    return (
+      <div>
+        <BarChart width={800} height={450} data={toptendata} barSize={45}>
+          <XAxis
+            dataKey="date"
+            stroke="#9A0E31"
+            style={{
+              fontFamily: 'Roboto',
+              fontWeight: 500,
+              textTransform: 'uppercase',
+            }}
+            dy={10}
+          />
+          <Tooltip />
+          <Legend />
+          <Bar
+            dataKey="confirmed"
+            fill="#9A0E31"
+            stroke="#FFF"
+            label={{position: 'top'}}
+            radius={[8, 8, 0, 0]}
+          />
+        </BarChart>
+      </div>
+    )
+  }
+
+  graph = (type, color) => {
+    const {forOtherChart} = this.state
     return (
       <LineChart
         width={730}
         height={250}
-        data={alldata}
+        data={forOtherChart}
         margin={{top: 5, right: 30, left: 20, bottom: 5}}
       >
-        <XAxis dataKey="date" />
+        <XAxis
+          dataKey="date"
+          style={{
+            fontFamily: 'Roboto',
+            fontWeight: 500,
+            textTransform: 'uppercase',
+          }}
+          dy={10}
+        />
         <YAxis />
         <Tooltip />
         <Legend />
@@ -65,8 +134,10 @@ class ChartsData extends Component {
   render() {
     return (
       <div className="charts-container">
+        <div className="barchart-container">{this.barChart()}</div>
+
         <h1 className="charts-title">Spread Trends</h1>
-        <div className="barcharts-container">
+        <div testid="lineChartsContainer" className="barcharts-container">
           <div className="charts confirmed-background">
             {this.graph('confirmed', '#FF073A')}
           </div>

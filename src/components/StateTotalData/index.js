@@ -76,7 +76,7 @@ class StateTotalData extends Component {
             onClick={() => this.onGetTotal(confirmedData.name)}
           >
             <div testid="stateSpecificConfirmedCasesContainer">
-              <h1 className="stats-title">{confirmedData.name}</h1>
+              <p className="stats-title">{confirmedData.name}</p>
               <img
                 src={confirmedData.logo}
                 alt="state specific confirmed cases pic"
@@ -93,7 +93,7 @@ class StateTotalData extends Component {
             onClick={() => this.onGetTotal(activeData.name)}
           >
             <div testid="stateSpecificActiveCasesContainer">
-              <h1 className="stats-title">{activeData.name}</h1>
+              <p className="stats-title">{activeData.name}</p>
               <img
                 src={activeData.logo}
                 alt="state specific active cases pic"
@@ -109,13 +109,15 @@ class StateTotalData extends Component {
             value={recoveredData.name}
             onClick={() => this.onGetTotal(recoveredData.name)}
           >
-            <h1 className="stats-title">{recoveredData.name}</h1>
-            <img
-              src={recoveredData.logo}
-              alt="state specific recovered cases pic"
-              className="stats-icon"
-            />
-            <p className="stats-number">{recoveredData.value}</p>
+            <div testid="stateSpecificRecoveredCasesContainer">
+              <p className="stats-title">{recoveredData.name}</p>
+              <img
+                src={recoveredData.logo}
+                alt="state specific recovered cases pic"
+                className="stats-icon"
+              />
+              <p className="stats-number">{recoveredData.value}</p>
+            </div>
           </li>
           <li
             className={`category-item ${deceasedData.name}`}
@@ -124,13 +126,15 @@ class StateTotalData extends Component {
             value={deceasedData.name}
             onClick={() => this.onGetTotal(deceasedData.name)}
           >
-            <h1 className="stats-title">{deceasedData.name}</h1>
-            <img
-              src={deceasedData.logo}
-              alt="state specific deceased cases pic"
-              className="stats-icon"
-            />
-            <p className="stats-number">{deceasedData.value}</p>
+            <div testid="stateSpecificDeceasedCasesContainer">
+              <p className="stats-title">{deceasedData.name}</p>
+              <img
+                src={deceasedData.logo}
+                alt="state specific deceased cases pic"
+                className="stats-icon"
+              />
+              <p className="stats-number">{deceasedData.value}</p>
+            </div>
           </li>
         </ul>
       </>

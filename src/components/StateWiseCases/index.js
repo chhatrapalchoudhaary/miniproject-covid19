@@ -192,7 +192,6 @@ class StateWiseCases extends Component {
       const stateName = stateObject[0].state_name
 
       const datedata = new Date(data[stateCode].meta.last_updated)
-      console.log(datedata)
 
       this.setState({
         eachStateTotalData: eachState,
@@ -241,8 +240,12 @@ class StateWiseCases extends Component {
       distName: element,
       value:
         districtOutput[element].total.confirmed -
-        districtOutput[element].total.recovered -
-        districtOutput[element].total.deceased,
+        (districtOutput[element].total.recovered +
+          districtOutput[element].total.deceased)
+          ? districtOutput[element].total.confirmed -
+            (districtOutput[element].total.recovered +
+              districtOutput[element].total.deceased)
+          : 0,
     }))
     activeCases.sort((a, b) => b.value - a.value)
 
@@ -265,7 +268,7 @@ class StateWiseCases extends Component {
     const catdata = this.getCategoryWiseData()
 
     return (
-      <div className="state-details">
+      <div className="state-details" testid="stateDetailsLoader">
         <div className="state-name-row">
           <div className="state-name-container">{nameOfState}</div>
           <div className="testno-container">
@@ -273,11 +276,11 @@ class StateWiseCases extends Component {
             <h1 className="testno">{totalTestedData}</h1>
           </div>
         </div>
-        <div testid="timelinesDataLoader">
+        <div>
           <p className="last-date">{`last update on ${date}`}</p>
         </div>
         <div className="align-center-row">
-          <div className="country-stats" testid="stateDetailsLoader">
+          <div className="country-stats">
             <StateTotalData
               onGetCategory={this.onGetCategory}
               eachStateTotalData={eachStateTotalData}
@@ -291,7 +294,10 @@ class StateWiseCases extends Component {
             Top Districts
           </h1>
           <div className="ul-parent-list">
-            <ul className="district-data-ul-list">
+            <ul
+              className="district-data-ul-list"
+              testid="topDistrictsUnorderedList"
+            >
               {catdata.map(each => (
                 <div className="districts-container" key={each.distName}>
                   <ShowEachDistrictData
@@ -302,7 +308,9 @@ class StateWiseCases extends Component {
               ))}
             </ul>
           </div>
-          <ChartsData stateCode={stateCode} />
+          <div testid="timelinesDataLoader">
+            <ChartsData stateCode={stateCode} />
+          </div>
         </div>
       </div>
     )
