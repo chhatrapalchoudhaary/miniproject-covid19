@@ -113,6 +113,9 @@
   list-style-type: none;
   flex-wrap: wrap;
 }
+.districts-container {
+  margin: 0px;
+}
 
 .ul-parent-list {
   list-style-type: none;
@@ -129,4 +132,12 @@
 }
 .Deceased-color {
   color: #6c757d;
+}
+
+.list-style-state {
+  list-style-type: none;
+}
+
+.graphs-data {
+  margin-top: 40px;
 }

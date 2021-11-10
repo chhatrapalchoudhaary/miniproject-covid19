@@ -60,7 +60,7 @@ class About extends Component {
     const {faqData, factsData} = this.state
     return (
       <>
-        <ul data-testid="faqsUnorderedList" className="factlist">
+        <ul testid="faqsUnorderedList" className="factlist">
           {faqData.map(each => (
             <FaqsList
               key={each.qno}
@@ -71,7 +71,7 @@ class About extends Component {
         </ul>
 
         <h1 className="about-vaccine-title">Facts</h1>
-        <ul testid="faqsUnorderedList" className="factlist">
+        <ul className="factlist">
           {factsData.map(each => (
             <FactsList key={each.id} banner={each.banner} />
           ))}

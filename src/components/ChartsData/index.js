@@ -11,13 +11,14 @@ import {
   Bar,
   Label,
 } from 'recharts'
-import {format} from 'date-fns'
+import Loader from 'react-loader-spinner'
 import './index.css'
 
 class ChartsData extends Component {
   state = {
     alldata: '',
     forOtherChart: '',
+    isLoading: true,
   }
 
   componentDidMount() {
@@ -41,7 +42,7 @@ class ChartsData extends Component {
       const dataDateWise = Object.keys(data[stateCode].dates)
 
       const particularState = dataDateWise.map(date => ({
-        date: format(new Date(date), 'dd MMM'),
+        date,
         confirmed: data[stateCode].dates[date].total.confirmed,
         deceased: data[stateCode].dates[date].total.deceased,
         recovered: data[stateCode].dates[date].total.recovered,
@@ -68,22 +69,45 @@ class ChartsData extends Component {
       this.setState({
         alldata: particularState,
         forOtherChart: particularStateForOtherChart,
+        isLoading: false,
       })
     }
   }
 
+  renderLoadingView = () => (
+    <div
+      className="products-details-loader-container"
+      testid="timelinesDataLoader"
+    >
+      <Loader type="ThreeDots" color="#0b69ff" height="50" width="50" />
+    </div>
+  )
+
   barChart = () => {
     const {alldata} = this.state
+    const {category} = this.props
+    const barChartType = category.toLowerCase()
+
     const toptendata = alldata.slice(Math.max(alldata.length - 10, 0))
     // console.log('all data for bar chart')
     // console.log(toptendata)
+    let colortype = '#9A0E31'
+    if (barChartType === 'confirmed') {
+      colortype = '#9A0E31'
+    } else if (barChartType === 'active') {
+      colortype = '#0A4FA0'
+    } else if (barChartType === 'recovered') {
+      colortype = '#216837'
+    } else if (barChartType === 'deceased') {
+      colortype = '#474C57'
+    }
 
     return (
       <div>
-        <BarChart width={800} height={450} data={toptendata} barSize={45}>
+        <BarChart width={800} height={500} data={toptendata} barSize={45}>
           <XAxis
             dataKey="date"
-            stroke="#9A0E31"
+            stroke={`${colortype}`}
             style={{
               fontFamily: 'Roboto',
               fontWeight: 500,
@@ -94,10 +118,9 @@ class ChartsData extends Component {
           <Tooltip />
           <Legend />
           <Bar
-            dataKey="confirmed"
-            fill="#9A0E31"
-            stroke="#FFF"
-            label={{position: 'top'}}
+            dataKey={`${barChartType}`}
+            fill={`${colortype}`}
+            label={{position: 'top', fill: '#fff'}}
             radius={[8, 8, 0, 0]}
           />
         </BarChart>
@@ -131,31 +154,37 @@ class ChartsData extends Component {
     )
   }
 
-  render() {
-    return (
-      <div className="charts-container">
-        <div className="barchart-container">{this.barChart()}</div>
+  allChartsView = () => (
+    <>
+      <div className="barchart-container">{this.barChart()}</div>
 
-        <h1 className="charts-title">Spread Trends</h1>
-        <div testid="lineChartsContainer" className="barcharts-container">
-          <div className="charts confirmed-background">
-            {this.graph('confirmed', '#FF073A')}
-          </div>
-          <div className="charts active-background">
-            {this.graph('active', '#007BFF')}
-          </div>
-          <div className="charts recovered-background">
-            {this.graph('recovered', '#27A243')}
-          </div>
-          <div className="charts deceased-background">
-            {this.graph('deceased', '#6C757D')}
-          </div>
-          <div className="charts tested-background">
-            {this.graph('tested', '#9673B9')}
-          </div>
+      <h1 className="charts-title">Spread Trends</h1>
+      <div testid="lineChartsContainer" className="barcharts-container">
+        <div className="charts confirmed-background">
+          {this.graph('confirmed', '#FF073A')}
+        </div>
+        <div className="charts active-background">
+          {this.graph('active', '#007BFF')}
+        </div>
+        <div className="charts recovered-background">
+          {this.graph('recovered', '#27A243')}
+        </div>
+        <div className="charts deceased-background">
+          {this.graph('deceased', '#6C757D')}
+        </div>
+        <div className="charts tested-background">
+          {this.graph('tested', '#9673B9')}
         </div>
       </div>
-    )
+    </>
+  )
+
+  render() {
+    const {isLoading} = this.state
+    const showAllData = isLoading
+      ? this.renderLoadingView()
+      : this.allChartsView()
+    return <div className="charts-container">{showAllData}</div>
   }
 }
 

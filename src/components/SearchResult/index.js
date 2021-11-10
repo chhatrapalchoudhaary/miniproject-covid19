@@ -1,4 +1,5 @@
 import {Link} from 'react-router-dom'
+import {BiChevronRightSquare} from 'react-icons/bi'
 import './index.css'
 import '../../fonts/HKGrotesk-Regular.otf'
 
@@ -13,9 +14,8 @@ const SearchResult = props => {
 
           <button type="button" className="search-button">
             {statecode}
-            <img
-              src="/img/Line.png"
-              data-testid="searchResultChevronRightIcon"
+            <BiChevronRightSquare
+              testid="searchResultChevronRightIcon"
               alt="line icon"
               className="icon-right"
             />

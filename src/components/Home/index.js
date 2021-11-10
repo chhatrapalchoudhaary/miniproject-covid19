@@ -2,6 +2,7 @@ import {Component} from 'react'
 import Loader from 'react-loader-spinner'
 import {Link} from 'react-router-dom'
 import {BsSearch} from 'react-icons/bs'
+import {FcGenericSortingAsc, FcGenericSortingDesc} from 'react-icons/fc'
 import Header from '../Header'
 import Footer from '../Footer'
 import TotalStats from '../TotalStats'
@@ -286,6 +287,26 @@ class Home extends Component {
     </div>
   )
 
+  whenAscendingSortButtonClicked = () => {
+    const {statesinfo} = this.state
+    const sortedList = statesinfo.sort((a, b) => {
+      const x = a.stateName.toUpperCase()
+      const y = b.stateName.toUpperCase()
+      return x > y ? 1 : -1
+    })
+    this.setState({statesinfo: sortedList})
+  }
+
+  whenDescendingSortButtonClicked = () => {
+    const {statesinfo} = this.state
+    const sortedList = statesinfo.sort((a, b) => {
+      const x = a.stateName.toUpperCase()
+      const y = b.stateName.toUpperCase()
+      return x < y ? 1 : -1
+    })
+    this.setState({statesinfo: sortedList})
+  }
+
   renderAllStatesList = () => {
     const {statesinfo} = this.state
 
@@ -294,6 +315,22 @@ class Home extends Component {
         <div className="table-header">
           <div className="state-name-heading">
             <p className="table-header-title ">States/UT</p>
+            <button
+              className="order"
+              type="button"
+              testid="ascendingSort"
+              onClick={this.whenAscendingSortButtonClicked}
+            >
+              <FcGenericSortingAsc className="order-icon" />
+            </button>
+            <button
+              className="order"
+              type="button"
+              testid="descendingSort"
+              onClick={this.whenDescendingSortButtonClicked}
+            >
+              <FcGenericSortingDesc className="order-icon" />
+            </button>
           </div>
           <div className="other-tables-bar">
             <p className="table-header-title">Confirmed</p>

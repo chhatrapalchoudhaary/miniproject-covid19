@@ -268,12 +268,12 @@ class StateWiseCases extends Component {
     const catdata = this.getCategoryWiseData()
 
     return (
-      <div className="state-details" testid="stateDetailsLoader">
+      <div className="state-details">
         <div className="state-name-row">
           <div className="state-name-container">{nameOfState}</div>
           <div className="testno-container">
             <p className="test-title">Tested</p>
-            <h1 className="testno">{totalTestedData}</h1>
+            <p className="testno">{totalTestedData}</p>
           </div>
         </div>
         <div>
@@ -294,22 +294,23 @@ class StateWiseCases extends Component {
             Top Districts
           </h1>
           <div className="ul-parent-list">
-            <ul
-              className="district-data-ul-list"
-              testid="topDistrictsUnorderedList"
-            >
+            <div className="district-data-ul-list">
               {catdata.map(each => (
-                <div className="districts-container" key={each.distName}>
+                <ul
+                  className="districts-container"
+                  testid="topDistrictsUnorderedList"
+                  key={each.distName}
+                >
                   <ShowEachDistrictData
                     number={each.value}
                     name={each.distName}
                   />
-                </div>
+                </ul>
               ))}
-            </ul>
+            </div>
           </div>
-          <div testid="timelinesDataLoader">
-            <ChartsData stateCode={stateCode} />
+          <div className="graphs-data" testid="lineChartsContainer">
+            <ChartsData stateCode={stateCode} category={category} />
           </div>
         </div>
       </div>
