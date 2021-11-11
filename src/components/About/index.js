@@ -80,16 +80,17 @@ class About extends Component {
     )
   }
 
-  renderFactsData = () => {
-    const {factsData} = this.state
-    return (
-      <>
-        {factsData.map(each => (
-          <FactsList key={each.id} banner={each.banner} />
-        ))}
-      </>
-    )
-  }
+  //   renderFactsData = () => {
+  //     const {factsData} = this.state
+  //     return (
+  //       <>
+
+  //         {factsData.map(each => (
+  //           <FactsList key={each.id} banner={each.banner} />
+  //         ))}
+  //       </>
+  //     )
+  //   }
 
   render() {
     const {isLoading} = this.state
@@ -103,9 +104,9 @@ class About extends Component {
             <p className="about-vaccine-title">
               COVID-19 vaccines be ready for distribution
             </p>
-            <ul testid="faqsUnorderedList" className="factlist">
+            <div className="factlist">
               {isLoading ? this.renderloader() : this.renderAllData()}
-            </ul>
+            </div>
           </div>
           <Footer />
         </div>

@@ -10,6 +10,7 @@
   border-radius: 12px;
   margin-bottom: 32px;
   padding: 40px;
+  overflow-x: auto;
 }
 .confirmed-background {
   background-color: #331427;
@@ -33,7 +34,6 @@
   font-weight: 500;
   font-size: 32px;
   line-height: 48px;
-
   color: #cbd5e1;
 }
 
@@ -42,4 +42,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.chart-wrapper {
+  overflow-x: auto;
+}
+
+@media (max-width: 600px) {
+  .charts {
+    width: 100%;
+  }
 }

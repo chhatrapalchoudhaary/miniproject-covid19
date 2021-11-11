@@ -1,7 +1,6 @@
 .state-name-container {
   height: 64px;
-  left: 150px;
-  top: 144px;
+  margin: 10px;
   background: rgba(2, 132, 199, 0.16);
   border-radius: 32px;
   font-family: HK Grotesk;
@@ -114,7 +113,13 @@
   flex-wrap: wrap;
 }
 .districts-container {
-  margin: 0px;
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .ul-parent-list {
@@ -140,4 +145,20 @@
 
 .graphs-data {
   margin-top: 40px;
+}
+
+@media (max-width: 600px) {
+  .state-name-container {
+    font-size: 16px;
+  }
+
+  .test-title {
+    font-size: 12px;
+  }
+  .testno {
+    font-size: 16px;
+  }
+  .last-date {
+    font-size: 12px;
+  }
 }

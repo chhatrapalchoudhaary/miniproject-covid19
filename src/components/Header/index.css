@@ -42,3 +42,31 @@
 .link {
   text-decoration: none;
 }
+
+.toggle-button {
+  background-color: transparent;
+  outline: none;
+  border: none;
+}
+
+.mobile-header-container {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .mobile-header-container {
+    display: block;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    min-height: 80px;
+    background-color: #1e1e30;
+    padding: 0px 10px;
+  }
+
+  .header-container {
+    display: none;
+  }
+}

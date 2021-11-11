@@ -1,6 +1,5 @@
 import {Component} from 'react'
 import Loader from 'react-loader-spinner'
-import {Link} from 'react-router-dom'
 import {BsSearch} from 'react-icons/bs'
 import {FcGenericSortingAsc, FcGenericSortingDesc} from 'react-icons/fc'
 import Header from '../Header'
@@ -181,7 +180,6 @@ class Home extends Component {
     const response = await fetch(apiUrl, options)
     if (response.ok) {
       const data = await response.json()
-      console.log(data)
       let nationalWideConfirmedCases = 0
       let nationalWideRecoveredCases = 0
       let nationalWideDeceasedCases = 0
@@ -399,7 +397,7 @@ class Home extends Component {
     const {isLoading, filteredSearchList, search} = this.state
     const showSearchList =
       filteredSearchList.length === 0 ? '' : this.showSearchList()
-    console.log(filteredSearchList)
+
     return (
       <div className="main-container">
         <Header />

@@ -67,7 +67,7 @@ class StateTotalData extends Component {
 
     return (
       <>
-        <ul className="ul-list-eachstate">
+        <ul className="ul-list-eachstate ">
           <li
             className={`category-item ${confirmedData.name} ${itsactiveonload} `}
             tabIndex="-1"

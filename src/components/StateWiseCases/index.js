@@ -270,7 +270,7 @@ class StateWiseCases extends Component {
     return (
       <div className="state-details">
         <div className="state-name-row">
-          <div className="state-name-container">{nameOfState}</div>
+          <h1 className="state-name-container">{nameOfState}</h1>
           <div className="testno-container">
             <p className="test-title">Tested</p>
             <p className="testno">{totalTestedData}</p>
@@ -295,18 +295,18 @@ class StateWiseCases extends Component {
           </h1>
           <div className="ul-parent-list">
             <div className="district-data-ul-list">
-              {catdata.map(each => (
-                <ul
-                  className="districts-container"
-                  testid="topDistrictsUnorderedList"
-                  key={each.distName}
-                >
+              <ul
+                className="districts-container"
+                testid="topDistrictsUnorderedList"
+              >
+                {catdata.map(each => (
                   <ShowEachDistrictData
+                    key={each.distName}
                     number={each.value}
                     name={each.distName}
                   />
-                </ul>
-              ))}
+                ))}
+              </ul>
             </div>
           </div>
           <div className="graphs-data" testid="lineChartsContainer">

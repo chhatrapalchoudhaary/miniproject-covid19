@@ -7,9 +7,7 @@ import {
   Tooltip,
   Legend,
   BarChart,
-  CartesianGrid,
   Bar,
-  Label,
 } from 'recharts'
 import Loader from 'react-loader-spinner'
 import './index.css'
@@ -37,8 +35,6 @@ class ChartsData extends Component {
     if (response.ok) {
       const data = await response.json()
 
-      console.log(data[stateCode].dates)
-      const type = 'total'
       const dataDateWise = Object.keys(data[stateCode].dates)
 
       const particularState = dataDateWise.map(date => ({
@@ -65,7 +61,6 @@ class ChartsData extends Component {
             data[stateCode].dates[date].total.recovered),
       }))
 
-      console.log(particularState)
       this.setState({
         alldata: particularState,
         forOtherChart: particularStateForOtherChart,
@@ -103,7 +98,7 @@ class ChartsData extends Component {
     }
 
     return (
-      <div>
+      <div className="chart-wrapper">
         <BarChart width={800} height={500} data={toptendata} barSize={45}>
           <XAxis
             dataKey="date"
@@ -131,26 +126,28 @@ class ChartsData extends Component {
   graph = (type, color) => {
     const {forOtherChart} = this.state
     return (
-      <LineChart
-        width={730}
-        height={250}
-        data={forOtherChart}
-        margin={{top: 5, right: 30, left: 20, bottom: 5}}
-      >
-        <XAxis
-          dataKey="date"
-          style={{
-            fontFamily: 'Roboto',
-            fontWeight: 500,
-            textTransform: 'uppercase',
-          }}
-          dy={10}
-        />
-        <YAxis />
-        <Tooltip />
-        <Legend />
-        <Line type="monotone" dataKey={type} stroke={color} />
-      </LineChart>
+      <div>
+        <LineChart
+          width={800}
+          height={250}
+          data={forOtherChart}
+          margin={{top: 5, right: 30, left: 20, bottom: 5}}
+        >
+          <XAxis
+            dataKey="date"
+            style={{
+              fontFamily: 'Roboto',
+              fontWeight: 500,
+              textTransform: 'uppercase',
+            }}
+            dy={10}
+          />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Line type="monotone" dataKey={type} stroke={color} />
+        </LineChart>
+      </div>
     )
   }
 
